@@ -30,6 +30,20 @@ duckdb.sql(answer)
 
 solution = duckdb.sql(answer).df()
 
+st.write("""
+# SQL SRS
+Spaced Repetitin System SQL practice
+""")
+with st.sidebar:
+    option = st.selectbox(
+        "What would you like to review?",
+        ("Joins", "GroupBy", "Windows Functions"),
+        index=None,
+        placeholder="Select a theme...",
+    )
+
+    st.write("You selected:", option)
+
 
 st.header("Entrez votre code :")
 query = st.text_area(label="Votre code SQL ici :", key="user_input")
