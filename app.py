@@ -5,7 +5,7 @@ import duckdb
 import streamlit as st
 
 
-con = duckdb.connect(database="data/exercices_sql_tables.duckdb", read_only=False)
+con = duckdb.connect(database="data/exercises_sql_tables.duckdb", read_only=False)
 
 
 # # checks
@@ -23,11 +23,11 @@ con = duckdb.connect(database="data/exercices_sql_tables.duckdb", read_only=Fals
 # Spaced Repetitin System SQL practice
 # """
 # )
-with (st.sidebar):
-    themes = con.execute(f"SELECT theme FROM memory_state").df()
+with st.sidebar:
+    themes = con.execute("SELECT theme FROM memory_state").df()
 
     theme = st.selectbox(
-        f"What would you like to review?",
+        "What would you like to review?",
         (t for t in themes.theme.tolist()),
         index=None,
         placeholder="Select a theme...",
@@ -80,6 +80,6 @@ with tab1:
 #
 with tab2:
     exercise_name = exercise.loc[0, "exercise_name"]
-    with open(f"answers/{exercise_name}.sql", "r") as f:
+    with open(f"answers/{exercise_name}.sql", "r", encoding="utf-8") as f:
         answer = f.read()
     st.write(answer)
