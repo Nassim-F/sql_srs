@@ -1,4 +1,5 @@
 # pylint: disable=missing-module-docstring
+import ast
 
 import duckdb
 import streamlit as st
@@ -40,10 +41,10 @@ with (st.sidebar):
 st.header("Entrez votre code :")
 query = st.text_area(label="Votre code SQL ici :", key="user_input")
 
-# if query:
-#     result = duckdb.sql(query).df()
-#     st.dataframe(result)
-#
+if query:
+    result = con.execute(query).df()
+    st.dataframe(result)
+
 #     try:
 #         result = result[solution_df.columns]
 #         st.dataframe(result.compare(solution_df))
@@ -57,10 +58,18 @@ query = st.text_area(label="Votre code SQL ici :", key="user_input")
 #         )
 #
 #
-# tab1, tab2 = st.tabs(["Tables", "Solution"])
+tab1, tab2 = st.tabs(["Tables", "Solution"])
 #
 #
-# with tab1:
+with tab1:
+
+    exercise_tables = ast.literal_eval(exercise.loc[0, "tables"])
+
+    for table in exercise_tables:
+        st.write(f"table : {table}")
+        df_table = con.execute(f"select * from {str(table)}")
+        st.dataframe(df_table)
+
 #     st.write("table: beverages")
 #     st.dataframe(beverages)
 #     st.write("table: food_items")
@@ -69,5 +78,8 @@ query = st.text_area(label="Votre code SQL ici :", key="user_input")
 #     st.dataframe(solution_df)
 #
 #
-# with tab2:
-#     st.write(ANSWER_STR)
+with tab2:
+    exercise_name = exercise.loc[0, "exercise_name"]
+    with open(f"answers/{exercise_name}.sql", "r") as f:
+        answer = f.read()
+    st.write(answer)
