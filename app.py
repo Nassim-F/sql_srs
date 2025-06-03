@@ -7,22 +7,6 @@ import streamlit as st
 
 con = duckdb.connect(database="data/exercises_sql_tables.duckdb", read_only=False)
 
-
-# # checks
-# ANSWER_STR = """
-# SELECT * FROM beverages
-# CROSS JOIN food_items
-# """
-# duckdb.sql(ANSWER_STR)
-
-# solution_df = duckdb.sql(ANSWER_STR).df()
-
-# st.write(
-#     """
-# # SQL SRS
-# Spaced Repetitin System SQL practice
-# """
-# )
 with st.sidebar:
     themes = con.execute("SELECT theme FROM memory_state").df()
 
@@ -38,6 +22,12 @@ with st.sidebar:
 
     st.write(exercise)
 
+    exercise_name = exercise.loc[0, "exercise_name"]
+    with open(f"answers/{exercise_name}.sql", "r", encoding="utf-8") as f:
+        answer = f.read()
+
+    solution_df = con.execute(answer).df()
+
 st.header("Entrez votre code :")
 query = st.text_area(label="Votre code SQL ici :", key="user_input")
 
@@ -45,19 +35,19 @@ if query:
     result = con.execute(query).df()
     st.dataframe(result)
 
-#     try:
-#         result = result[solution_df.columns]
-#         st.dataframe(result.compare(solution_df))
-#     except KeyError as e:
-#         st.write("Some columns are missing")
-#
-#     n_lines_difference = result.shape[0] - solution_df.shape[0]
-#     if n_lines_difference != 0:
-#         st.write(
-#             f"result has a {n_lines_difference} lines difference with the solution"
-#         )
-#
-#
+    try:
+        result = result[solution_df.columns]
+        st.dataframe(result.compare(solution_df))
+    except KeyError as e:
+        st.write("Some columns are missing")
+
+    n_lines_difference = result.shape[0] - solution_df.shape[0]
+    if n_lines_difference != 0:
+        st.write(
+            f"result has a {n_lines_difference} lines difference with the solution"
+        )
+
+
 tab1, tab2 = st.tabs(["Tables", "Solution"])
 #
 #
@@ -79,7 +69,4 @@ with tab1:
 #
 #
 with tab2:
-    exercise_name = exercise.loc[0, "exercise_name"]
-    with open(f"answers/{exercise_name}.sql", "r", encoding="utf-8") as f:
-        answer = f.read()
     st.write(answer)
