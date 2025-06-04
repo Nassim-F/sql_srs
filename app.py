@@ -3,6 +3,7 @@
 import os
 import logging
 import subprocess
+import sys
 
 import duckdb
 import streamlit as st
@@ -13,7 +14,7 @@ if "data" not in os.listdir():
     os.mkdir("data")
 
 if "exercises_sql_tables.duckdb" not in os.listdir("data"):
-    subprocess.run(["sys.executable", "init_db.py"], check=False)
+    subprocess.run([sys.executable, "init_db.py"], check=False)
 
 con = duckdb.connect(database="data/exercises_sql_tables.duckdb", read_only=False)
 
