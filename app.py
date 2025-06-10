@@ -1,7 +1,7 @@
 # pylint: disable=missing-module-docstring
 
-import os
 import logging
+import os
 import subprocess
 import sys
 
@@ -30,12 +30,12 @@ with st.sidebar:
 
     if theme:
         st.write(f"You selected {theme}")
-        select_exercise_query = f"SELECT * FROM memory_state WHERE theme = '{theme}'"
+        SELECT_EXERCISE_QUERY = f"SELECT * FROM memory_state WHERE theme = '{theme}'"
     else:
-        select_exercise_query = "SELECT * FROM memory_state"
+        SELECT_EXERCISE_QUERY = "SELECT * FROM memory_state"
 
     exercise = (
-        con.execute(select_exercise_query)
+        con.execute(SELECT_EXERCISE_QUERY)
         .df()
         .sort_values("last_reviewed")
         .reset_index()
