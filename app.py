@@ -31,13 +31,14 @@ def check_users_solution(user_query: str) -> None:
     try:
         result = result[solution_df.columns]
         st.dataframe(result.compare(solution_df))
-    except KeyError as e:
+    except KeyError:
         st.write("Some columns are missing")
     n_lines_difference = result.shape[0] - solution_df.shape[0]
     if n_lines_difference != 0:
         st.write(
             f"result has a {n_lines_difference} lines difference with the solution"
         )
+
 
 with st.sidebar:
     themes = con.execute("SELECT DISTINCT theme FROM memory_state").df()
@@ -75,7 +76,7 @@ query = st.text_area(label="Votre code SQL ici :", key="user_input")
 
 
 if query:
-    check_users_solution()
+    check_users_solution(query)
 
 tab1, tab2 = st.tabs(["Tables", "Solution"])
 #
