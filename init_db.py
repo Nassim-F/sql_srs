@@ -10,10 +10,10 @@ con = duckdb.connect(database="data/exercises_sql_tables.duckdb", read_only=Fals
 # ----------------------------
 
 data = {
-    "theme": ["cross_joins", "cross_joins"],
-    "exercise_name": ["beverages_and_food", "sizes_and_trademarks"],
-    "tables": [["beverages", "food_items"], ["sizes", "trademarks"]],
-    "last_reviewed": ["1980-01-01", "1970-01-01"],
+    "theme": ["cross_joins", "cross_joins", "cross_joins"],
+    "exercise_name": ["beverages_and_food", "sizes_and_trademarks", "hours_and_quarters"],
+    "tables": [["beverages", "food_items"], ["sizes", "trademarks"], ["hours", "quarters"]],
+    "last_reviewed": ["1980-01-01", "1970-01-01", "1970-01-01"],
 }
 memory_state_df = pd.DataFrame(data)
 con.execute("CREATE TABLE IF NOT EXISTS memory_state AS SELECT * FROM memory_state_df")
@@ -63,5 +63,30 @@ Lewis
 
 trademarks = pd.read_csv(io.StringIO(CSV4))
 con.execute("CREATE TABLE IF NOT EXISTS trademarks AS SELECT * FROM trademarks")
+
+
+CSV5 = """
+hour
+08
+09
+10
+11
+12
+"""
+
+hours = pd.read_csv(io.StringIO(CSV5))
+con.execute("CREATE TABLE IF NOT EXISTS hours AS SELECT * FROM hours")
+
+CSV6 = """
+quarter
+00
+15
+30
+45
+"""
+
+quarters = pd.read_csv(io.StringIO(CSV5))
+con.execute("CREATE TABLE IF NOT EXISTS quarters AS SELECT * FROM quarters")
+
 
 con.close()
